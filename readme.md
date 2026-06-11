@@ -2,13 +2,13 @@
 
 ## Información del Estudiante
 
-- **Nombre:** [Tu nombre completo aquí]
-- **Carrera:** [Tu carrera]
-- **Fecha de inicio:** [Fecha]
+- **Nombre:** Jennifer Balseca
+- **Carrera:** PUCETEC - Desarrollo de Software
+- **Fecha de inicio:** 11/06/2026
 
 ---
 
-Este proyecto es una aplicación móvil desarrollada con Ionic y React que implementa un cliente de GitHub. A través de una serie de laboratorios, construirás gradualmente las funcionalidades para gestionar repositorios de GitHub.
+Este proyecto es una aplicación móvil desarrollada con Ionic y React que implementa un cliente de GitHub. A través de una serie de laboratorios, construirás gradualmente las funcionalidades para gestionar repositorios de GitHb.
 
 ## Descripción del Proyecto
 

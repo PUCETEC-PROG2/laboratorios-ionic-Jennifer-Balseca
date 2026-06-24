@@ -1,8 +1,45 @@
-import { IonButton, IonContent, IonHeader, IonInput, IonPage, IonTextarea, IonTitle, IonToolbar } from '@ionic/react';
-
+import { IonButton, IonContent, IonHeader, IonInput, IonPage, IonText, IonTextarea, IonTitle, IonToolbar, useIonViewWillEnter } from '@ionic/react';
+import { useHistory } from 'react-router';
+import { useState } from 'react';
+import { RepositoryPayload } from '../interfaces/RepositoryPayload';
 import './Tab2.css';
+import { createRepository } from '../services/GithubService';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 const Tab2: React.FC = () => {
+  const history = useHistory();
+  const [repositoryData, setRepositoryData] = useState<RepositoryPayload>({
+    name: "",
+    description: ""
+  });
+
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const saveRepo = () => {
+    if (repositoryData.name.trim() === '') {
+      setErrorMsg("El nombre del repositorio es obligatorio");
+      return;
+    }
+    setLoading(true);
+    createRepository(repositoryData)
+      .then(() => history.push("/tab1"))
+      .catch((error) => setErrorMsg("Error al crear repositorio" + error))
+      .finally(() => {
+        setLoading(false);
+        setRepositoryData({
+          name: "",
+          description: ""
+        });
+      });
+  };
+
+  useIonViewWillEnter(() => {
+    setErrorMsg("");
+  })
+
+
+
   return (
     <IonPage>
       <IonHeader>
@@ -19,33 +56,36 @@ const Tab2: React.FC = () => {
 
         <div className="form-container">
           <IonInput
-          className="form-field"
-          label="Nombre del Repositorio"
-          labelPlacement="floating"
-          placeholder="Ingrese el nombre del Repositorio"
-        />
+            className="form-field"
+            label="Nombre del Repositorio"
+            labelPlacement="floating"
+            placeholder="Ingrese el nombre del Repositorio"
+            value={repositoryData.name}
+            onIonChange={(e) => setRepositoryData({ ...repositoryData, name: e.detail.value! })}
+          />
 
-        <IonTextarea
-          className="form-field"
-          label="Descripción del Repositorio"
-          labelPlacement="floating"
-          placeholder="Ingrese el descripción del Repositorio"
-          rows={6}
-        />
+          <IonTextarea
+            className="form-field"
+            label="Descripción del Repositorio"
+            labelPlacement="floating"
+            placeholder="Ingrese el descripción del Repositorio"
+            value={repositoryData.description}
+            onIonChange={(e) => setRepositoryData({ ...repositoryData, description: e.detail.value! })}
+            rows={6}
+          />
+          {errorMsg !== "" && <IonText color="danger">{errorMsg}</IonText>}
 
-        <IonButton
-          className="form-field"
-          expand="block"
-          shape="round"
-          color="primary"
-        >
-          Guardar
-        </IonButton>
+          <IonButton
+            className="form-field"
+            expand="block"
+            shape="round"
+            color="primary"
+            onClick={saveRepo}
+          >
+            Guardar
+          </IonButton>
         </div>
-    
-
-
-
+        {loading && <LoadingSpinner />}
 
       </IonContent>
     </IonPage>
